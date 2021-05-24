@@ -1,10 +1,4 @@
 from flask import Flask
-from psearch import prediction
-from flask import render_template, abort, url_for, json, jsonify, Flask, Response, send_from_directory, send_file, Flask, make_response, request
-import pandas as pd
-import json
-import os
-import requests
 
 app = Flask(__name__)
 
