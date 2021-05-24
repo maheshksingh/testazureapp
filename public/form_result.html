@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<style>
+  body{
+    font-family: Helvetica;
+  }
+  img {
+    float: left;
+    margin-left: 3%;
+  }
+  h1{
+    display: inline-block;
+    text-align: center;
+    position:relative; 
+    margin-left: 30px;
+    margin-top: 30px;
+  }
+  h2{
+    text-align: center;
+    font-size: 35px;
+  }
+  form{
+    text-align: center;
+    font-size: 35px;
+  }
+  input[type=text] {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  box-sizing: border-box;
+  border: 1px solid #555;
+  outline: none;
+}
+
+input[type=text]:focus {
+  background-color: rgba(173, 230, 203, 0.466);
+}
+#search1{
+    float: left;
+    margin-left: 3%;
+    height: 30%;
+    width: 40%;
+    background-color: rgba(214, 243, 247, 0.377);
+    padding: 1%;
+    padding-right: 2%;
+}
+#search2{
+    float: right;
+    margin-right: 7%;
+    height: 30%;
+    width: 40%;
+    background-color: rgba(214, 243, 247, 0.377);
+    padding: 1%;
+    padding-right: 2%;
+}
+input{
+    border-radius: 10px;
+    height: auto;
+    width: auto;
+}
+table, th, td {
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+th, td {
+  padding: 5px;
+  text-align: left;
+}
+#result{
+  align-items: center;
+  text-align: center;
+  border-radius: 20px;
+  margin-left: 30%;
+  margin-top: 1%;
+  height: 30%;
+  width: 40%;
+  background-color: rgba(214, 243, 247, 0.377);
+  padding: 1%;
+  padding-right: 2%;
+}
+#results{
+  align-items: center;
+  text-align: center;
+  border-radius: 20px;
+  margin-left: 30%;
+  margin-top: 1%;
+  height: 30%;
+  width: 40%;
+  padding: 1%;
+  padding-right: 2%;
+}
+</style>
+<body>
+<div id='result'>
+<h2>Results:</h2><br>
+{{ex}}<br><br>
+{% for i in r %}
+<table id="results">
+	<tr>
+		<th>Name:</th>
+		<td>{{i.Name}}</td>
+	</tr>
+	<tr>
+		<th>Segment Code:</th>
+		<td>{{i.SegC}}</td>
+	</tr>	<tr>
+		<th>Segment Description:</th>
+		<td>{{i.SegD}}
+		</td>
+	</tr>	<tr>
+		<th>Demarcation:</th>
+		<td>{{i.Demarcation}}</td>
+	</tr>	<tr>
+		<th>Characteristics:</th>
+		<td>{{i.Characteristics}}</td>
+	</tr>
+</table>
+{% endfor %}
+</div> 
+</body>
+</html>

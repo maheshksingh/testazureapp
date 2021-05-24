@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<style>
+  body{
+    font-family: Helvetica;
+  }
+  #navbar{
+    background-color: rgb(245, 244, 244);
+    size: 40px;
+  }
+  img {
+    float: left;
+    margin-left: 3%;
+  }
+  h1{
+    display: inline-block;
+    text-align: center;
+    position:relative; 
+    margin-left: 42%;
+    margin-top: 15px;
+  }
+  h2{
+    text-align: center;
+    font-size: 35px;
+  }
+  form{
+    text-align: center;
+    font-size: 35px;
+  }
+  input[type=text] {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  box-sizing: border-box;
+  border: 1px solid #555;
+  outline: none;
+}
+
+input[type=text]:focus {
+  background-color: rgba(173, 230, 203, 0.466);
+}
+#search1{
+    align-items: center;
+    border-radius: 20px;
+    margin-left: 30%;
+    margin-top: 1%;
+    height: 30%;
+    width: 40%;
+    background-color: rgba(214, 243, 247, 0.377);
+    padding: 1%;
+    padding-right: 2%;
+}
+input{
+    border-radius: 10px;
+    height: auto;
+    width: auto;
+}
+</style>
+<div id='search1'>
+    <h1 style="font-size: 20px;">Search 1:</h1>
+    <form role="form" action="" method="POST">
+        <input type="text" name="pno" placeholder="Reference Part/ Preceding Part/ Succeeding Part"minlength="6" maxlength="6">
+        <input style="font-size: 20px;" type="submit">
+    </form>
+    </div>
+</body>
+</html>
