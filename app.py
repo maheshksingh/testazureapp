@@ -17,7 +17,6 @@ def s1():
         return render_template("public/s1.html")
     elif request.method=='POST':
         pno=request.form.get("pno")
-        pno=int(pno)
         filename = os.path.join(app.root_path,'data/data.json')
         with open(filename) as outfile:
             data = json.load(outfile)
