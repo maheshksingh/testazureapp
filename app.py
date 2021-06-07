@@ -6,10 +6,10 @@ import os
 
 app = Flask(__name__)
 
-@app.route("/")
-def hello():
-    #return "Hello, World!"
-    return render_template("public/form.html")
+#reading input
+@app.route('/',methods=['GET','POST'])
+def anal():
+        return render_template("public/form.html")
 
 @app.route('/form1',methods=['GET','POST'])
 def s1():
@@ -18,7 +18,15 @@ def s1():
     elif request.method=='POST':
         pno=request.form.get("pno")
         pno=int(pno)
-        return render_template("public/s2.html")
+        filename = os.path.join(app.root_path,'data/data.json')
+        with open(filename) as outfile:
+            data = json.load(outfile)
+        res=[x for x in data if x['Partno'] == pno]
+        if res==[]:
+            ex="Caution: The results are blank because the number you've entered might not exist. Please try again!"
+        else:
+            ex="We found the following details:"
+        return render_template("public/form_result.html",r=res,ex=ex)
 
 @app.route('/form2',methods=['GET','POST'])
 def s2(): 
@@ -31,6 +39,12 @@ def s2():
         func=request.form.get("pfunc")
         funcd=request.form.get("pfuncd")
         dem=request.form.get("pdem")
+        pty=request.form.get("pty")
+        wgt=request.form.get("wgt")
+        mat=request.form.get("mat")
+        lgt=request.form.get("lgt")
+        hgt=request.form.get("hgt")
+        wdt=request.form.get("wdt")
         #search string by user
         s_list=[]
         s_list.append(name)
@@ -39,19 +53,27 @@ def s2():
         s_list.append(func)
         s_list.append(funcd)
         s_list.append(dem)
+        s_list.append(pty)
+        s_list.append(wgt)
+        s_list.append(mat)
+        s_list.append(lgt)
+        s_list.append(hgt)
+        s_list.append(wdt)
         sch=""
         for i in s_list:
             if i!="":
                 sch+=i+" "
         #postman code to hit azure api
-        url = "https://qnaversion3-asvagkygeipvz44.search.windows.net/indexes/latest-azuresql-index/docs/search?api-version=2020-06-30"
+        url = "https://cognitivesearchtest.search.windows.net/indexes/segetcode-column-wise-azuresql-index/docs/search?api-version=2020-06-30-Preview&query_type=semantic&searchFields=Partno,Name,Demarcation,Characteristics,Functiongroup,PartType,Weight,Material,Length,Width,Height&queryLanguage=en-us"
 
-        payload = '{\r\n    \"search\":\"'+sch+'\"\r\n}'
-        headers = {'api-key': '4A50EEE8690AC6E0407E1C7969CACE5A',
-                    'Content-Type': 'application/json'
-                    }
-
-        response = requests.request("POST", url, headers=headers, data = payload)
+        payload = json.dumps({
+            "search": sch
+        })
+        headers = {
+        'api-key': 'A328C26CC0F9AF89AC6ABF68E0A809E2',
+        'Content-Type': 'application/json'
+        }
+        response = requests.request("POST", url, headers=headers, data=payload)
         res=response.json()
         r_list=[]
         if res['value']==[]:
@@ -61,6 +83,10 @@ def s2():
             for i in range(0,3):
                 r_list.append(res['value'][i])
         return render_template("public/form_result1.html",data=r_list,ex=ex)
+
+@app.route('/dummy',methods=['GET','POST'])
+def blank():
+    return render_template("public/dummy.html")
 
 
 if __name__ == "__main__":
