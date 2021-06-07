@@ -6,6 +6,11 @@ import os
 
 app = Flask(__name__)
 
+#initialising s1
+filename = os.path.join(app.root_path,'data/data.json')
+with open(filename) as outfile:
+    data = json.load(outfile)
+
 #reading input
 @app.route('/',methods=['GET','POST'])
 def anal():
@@ -17,9 +22,6 @@ def s1():
         return render_template("public/s1.html")
     elif request.method=='POST':
         pno=request.form.get("pno")
-        filename = os.path.join(app.root_path,'data/data.json')
-        with open(filename) as outfile:
-            data = json.load(outfile)
         res=[x for x in data if x['Partno'] == pno]
         if res==[]:
             ex="Caution: The results are blank because the number you've entered might not exist. Please try again!"
