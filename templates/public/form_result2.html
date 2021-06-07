@@ -97,11 +97,23 @@ th, td {
 <table id="results">
 	<tr>
 		<th>Part Name:</th>
-		<td>{{data['value'][i].Label}}</td>
+		<td>{{data['value'][i].Name}}</td>
 	</tr>
 	<tr>
-		<th>Segment:</th>
-		<td>{{data['value'][i].Intent}}</td>
+		<th>Function Group:</th>
+		<td>{{data['value'][i].Functiongroup}}</td>
+	</tr>
+	<tr>
+		<th>Part Type:</th>
+		<td>{{data['value'][i].PartType}}</td>
+	</tr>
+	<tr>
+		<th>Segment Code:</th>
+		<td>{{data['value'][i].SegmentCode}}</td>
+	</tr>
+	<tr>
+		<th>Segment Description:</th>
+		<td>{{data['value'][i].SegmentDescription}}</td>
 	</tr>
 </table><br><br>
 {% endfor %}

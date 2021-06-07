@@ -35,24 +35,7 @@
 input[type=text]:focus {
   background-color: rgba(173, 230, 203, 0.466);
 }
-#search1{
-    float: left;
-    margin-left: 3%;
-    height: 30%;
-    width: 40%;
-    background-color: rgba(214, 243, 247, 0.377);
-    padding: 1%;
-    padding-right: 2%;
-}
-#search2{
-    float: right;
-    margin-right: 7%;
-    height: 30%;
-    width: 40%;
-    background-color: rgba(214, 243, 247, 0.377);
-    padding: 1%;
-    padding-right: 2%;
-}
+
 input{
     border-radius: 10px;
     height: auto;
@@ -70,10 +53,10 @@ th, td {
   align-items: center;
   text-align: center;
   border-radius: 20px;
-  margin-left: 30%;
+  margin-left: 20%;
   margin-top: 1%;
   height: 30%;
-  width: 40%;
+  width: 80%;
   background-color: rgba(214, 243, 247, 0.377);
   padding: 1%;
   padding-right: 2%;
@@ -82,17 +65,17 @@ th, td {
   align-items: center;
   text-align: center;
   border-radius: 20px;
-  margin-left: 30%;
+  margin-left: 20%;
   margin-top: 1%;
   height: 30%;
-  width: 40%;
+  width: 50%;
   padding: 1%;
   padding-right: 2%;
 }
 </style>
 <body>
 <div id='result'>
-<h2>Results:</h2><br>
+<h2>Results:</h2>
 {{ex}}<br><br>
 {% for i in r %}
 <table id="results">
@@ -116,6 +99,8 @@ th, td {
 	</tr>
 </table>
 {% endfor %}
+<br>
+<button onclick="location.href='/form1'" type="button">Search again</button><br>
 </div> 
 </body>
 </html>
