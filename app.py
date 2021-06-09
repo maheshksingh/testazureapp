@@ -3,6 +3,7 @@ from flask import render_template
 import requests
 from flask import request, json
 import os
+import pyodbc 
 
 app = Flask(__name__)
 
@@ -21,7 +22,7 @@ def s1():
     if request.method=='GET':
         return render_template("public/s1.html")
     elif request.method=='POST':
-        import pyodbc 
+	pno=request.form.get("pno")
         cnxn = pyodbc.connect('DRIVER={ODBC Driver 17 for SQL Server};'
                       'SERVER=tcp:segmentcodedbserver.database.windows.net,1433;'
                       'DATABASE=segmentcodedb;UID=segmentcode;PWD=Mahesh143;')
