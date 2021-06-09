@@ -21,9 +21,15 @@ def s1():
     if request.method=='GET':
         return render_template("public/s1.html")
     elif request.method=='POST':
-        pno=request.form.get("pno")
-        res=[x for x in data if x['Partno'] == pno]
-        if res==[]:
+        import pyodbc 
+        cnxn = pyodbc.connect('DRIVER={ODBC Driver 17 for SQL Server};'
+                      'SERVER=tcp:segmentcodedbserver.database.windows.net,1433;'
+                      'DATABASE=segmentcodedb;UID=segmentcode;PWD=Mahesh143;')
+
+        cursor = cnxn.cursor()
+        cursor.execute("SELECT Partno,Name,Demarcation,Functiongroup,PartType,SegmentCode,SegmentDescription FROM segmentjune03 WHERE Partno="+pno) 
+        res = cursor.fetchone()
+        if res==None:
             ex="Caution: The results are blank because the number you've entered might not exist. Please try again!"
         else:
             ex="We found the following details:"
@@ -84,10 +90,6 @@ def s2():
             for i in range(0,3):
                 r_list.append(res['value'][i])
         return render_template("public/form_result1.html",data=r_list,ex=ex)
-
-@app.route('/dummy',methods=['GET','POST'])
-def blank():
-    return render_template("public/dummy.html")
 
 
 if __name__ == "__main__":
