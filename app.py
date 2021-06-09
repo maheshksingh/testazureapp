@@ -19,22 +19,22 @@ def anal():
 
 @app.route('/form1',methods=['GET','POST'])
 def s1():
-    if request.method=='GET':
-        return render_template("public/s1.html")
-    elif request.method=='POST':
-	pno=request.form.get("pno")
-        cnxn = pyodbc.connect('DRIVER={ODBC Driver 17 for SQL Server};'
-                      'SERVER=tcp:segmentcodedbserver.database.windows.net,1433;'
-                      'DATABASE=segmentcodedb;UID=segmentcode;PWD=Mahesh143;')
+	if request.method=='GET':
+		return render_template("public/s1.html")
+	elif request.method=='POST':
+		pno=request.form.get("pno")
+		cnxn = pyodbc.connect('DRIVER={ODBC Driver 17 for SQL Server};'
+			      'SERVER=tcp:segmentcodedbserver.database.windows.net,1433;'
+			      'DATABASE=segmentcodedb;UID=segmentcode;PWD=Mahesh143;')
 
-        cursor = cnxn.cursor()
-        cursor.execute("SELECT Partno,Name,Demarcation,Functiongroup,PartType,SegmentCode,SegmentDescription FROM segmentjune03 WHERE Partno="+pno) 
-        res = cursor.fetchone()
-        if res==None:
-            ex="Caution: The results are blank because the number you've entered might not exist. Please try again!"
-        else:
-            ex="We found the following details:"
-        return render_template("public/form_result.html",r=res,ex=ex)
+		cursor = cnxn.cursor()
+		cursor.execute("SELECT Partno,Name,Demarcation,Functiongroup,PartType,SegmentCode,SegmentDescription FROM segmentjune03 WHERE Partno="+pno) 
+		res = cursor.fetchone()
+		if res==None:
+		    ex="Caution: The results are blank because the number you've entered might not exist. Please try again!"
+		else:
+		    ex="We found the following details:"
+		return render_template("public/form_result.html",r=res,ex=ex)
 
 @app.route('/form2',methods=['GET','POST'])
 def s2(): 
