@@ -7,11 +7,6 @@ import pyodbc
 
 app = Flask(__name__)
 
-#initialising s1
-filename = os.path.join(app.root_path,'data/data.json')
-with open(filename) as outfile:
-    data = json.load(outfile)
-
 #reading input
 @app.route('/',methods=['GET','POST'])
 def anal():
