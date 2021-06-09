@@ -1,11 +1,19 @@
+#@Author: Rohin Singh
+
 from flask import Flask
-from flask import render_template
-import requests
-from flask import request, json
+from flask import render_template, abort, url_for, json, jsonify, Flask, Response, send_from_directory, send_file, Flask, make_response, request
+import pandas as pd
+import json
 import os
-import pyodbc 
+import requests
+import pyodbc
 
 app = Flask(__name__)
+
+#initialising s1
+# filename = os.path.join(app.root_path,'data/data.json')
+# with open(filename) as outfile:
+# data = "https://segmentcode.blob.core.windows.net/segmentcodecontainer/data.json?sp=r&st=2021-06-07T13:01:31Z&se=2021-06-07T21:01:31Z&spr=https&sv=2020-02-10&sr=b&sig=e2MX6C%2F3%2Fu2vy99YYZdnynteNWKsu68QHn%2BvU8kBTfA%3D"
 
 #reading input
 @app.route('/',methods=['GET','POST'])
@@ -14,22 +22,23 @@ def anal():
 
 @app.route('/form1',methods=['GET','POST'])
 def s1():
-	if request.method=='GET':
-		return render_template("public/s1.html")
-	elif request.method=='POST':
-		pno=request.form.get("pno")
-		cnxn = pyodbc.connect('DRIVER={ODBC Driver 17 for SQL Server};'
-			      'SERVER=tcp:segmentcodedbserver.database.windows.net,1433;'
-			      'DATABASE=segmentcodedb;UID=segmentcode;PWD=Mahesh143;')
+    if request.method=='GET':
+        return render_template("public/s1.html")
+    elif request.method=='POST':
+        pno=request.form.get("pno")
+        import pyodbc 
+        cnxn = pyodbc.connect('DRIVER={ODBC Driver 17 for SQL Server};'
+                      'SERVER=tcp:segmentcodedbserver.database.windows.net,1433;'
+                      'DATABASE=segmentcodedb;UID=segmentcode;PWD=Mahesh143;')
 
-		cursor = cnxn.cursor()
-		cursor.execute("SELECT Partno,Name,Demarcation,Functiongroup,PartType,SegmentCode,SegmentDescription FROM segmentjune03 WHERE Partno="+pno) 
-		res = cursor.fetchone()
-		if res==None:
-		    ex="Caution: The results are blank because the number you've entered might not exist. Please try again!"
-		else:
-		    ex="We found the following details:"
-		return render_template("public/form_result.html",r=res,ex=ex)
+        cursor = cnxn.cursor()
+        cursor.execute("SELECT Partno,Name,Demarcation,Functiongroup,PartType,SegmentCode,SegmentDescription FROM segmentjune03 WHERE Partno="+pno) 
+        res = cursor.fetchone()
+        if res==None:
+            ex="Caution: The results are blank because the number you've entered might not exist. Please try again!"
+        else:
+            ex="We found the following details:"
+        return render_template("public/form_result.html",r=res,ex=ex)
 
 @app.route('/form2',methods=['GET','POST'])
 def s2(): 
@@ -86,6 +95,10 @@ def s2():
             for i in range(0,3):
                 r_list.append(res['value'][i])
         return render_template("public/form_result1.html",data=r_list,ex=ex)
+
+@app.route('/dummy',methods=['GET','POST'])
+def blank():
+    return render_template("public/dummy.html")
 
 
 if __name__ == "__main__":
