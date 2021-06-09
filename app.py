@@ -10,12 +10,12 @@ app = Flask(__name__)
 #reading input
 @app.route('/',methods=['GET','POST'])
 def anal():
-        return render_template("public/form.html")
+        return render_template("templates/public/form.html")
 
 @app.route('/form1',methods=['GET','POST'])
 def s1():
 	if request.method=='GET':
-		return render_template("public/s1.html")
+		return render_template("templates/public/s1.html")
 	elif request.method=='POST':
 		pno=request.form.get("pno")
 		cnxn = pyodbc.connect('DRIVER={ODBC Driver 17 for SQL Server};'
