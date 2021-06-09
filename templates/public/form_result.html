@@ -77,28 +77,30 @@ th, td {
 <div id='result'>
 <h2>Results:</h2>
 {{ex}}<br><br>
-{% for i in r %}
 <table id="results">
 	<tr>
 		<th>Name:</th>
-		<td>{{i.Name}}</td>
+		<td>{{r[1]}}</td>
 	</tr>
 	<tr>
 		<th>Segment Code:</th>
-		<td>{{i.SegC}}</td>
+		<td>{{r[5]}}</td>
 	</tr>	<tr>
 		<th>Segment Description:</th>
-		<td>{{i.SegD}}
+		<td>{{r[6]}}
 		</td>
 	</tr>	<tr>
 		<th>Demarcation:</th>
-		<td>{{i.Demarcation}}</td>
+		<td>{{r[2]}}</td>
 	</tr>	<tr>
-		<th>Characteristics:</th>
-		<td>{{i.Characteristics}}</td>
+		<th>Function Group:</th>
+		<td>{{r[3]}}</td>
+	</tr>
+  <tr>
+		<th>Part Type :</th>
+		<td>{{r[4]}}</td>
 	</tr>
 </table>
-{% endfor %}
 <br>
 <button onclick="location.href='/form1'" type="button">Search again</button><br>
 </div> 
