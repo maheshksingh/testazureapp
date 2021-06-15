@@ -92,9 +92,10 @@ def s2():
             ex="Caution: The results are blank because the part details you've entered might not exist. Please try again!"
         else:
             ex="We found the following details:"
-            for i in range(0,3):
-                r_list.append(res['value'][i])
-        return render_template("public/form_result1.html",data=r_list,ex=ex)
+            r=res['value']
+	    unique={elem["Functiongroup"]: elem for elem in r}.values() 
+            unique=list(unique)
+        return render_template("public/form_result1.html",data=unique,ex=ex)
 
 @app.route('/dummy',methods=['GET','POST'])
 def blank():
