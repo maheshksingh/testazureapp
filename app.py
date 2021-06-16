@@ -6,14 +6,15 @@ import pandas as pd
 import json
 import os
 import requests
-import pyodbc
+import itertools
+from operator import itemgetter
 
 app = Flask(__name__)
 
 #initialising s1
 # filename = os.path.join(app.root_path,'data/data.json')
 # with open(filename) as outfile:
-# data = "https://segmentcode.blob.core.windows.net/segmentcodecontainer/data.json?sp=r&st=2021-06-07T13:01:31Z&se=2021-06-07T21:01:31Z&spr=https&sv=2020-02-10&sr=b&sig=e2MX6C%2F3%2Fu2vy99YYZdnynteNWKsu68QHn%2BvU8kBTfA%3D"
+data = "https://segmentcode.blob.core.windows.net/segmentcodecontainer/data.json?sp=r&st=2021-06-07T13:01:31Z&se=2021-06-07T21:01:31Z&spr=https&sv=2020-02-10&sr=b&sig=e2MX6C%2F3%2Fu2vy99YYZdnynteNWKsu68QHn%2BvU8kBTfA%3D"
 
 #reading input
 @app.route('/',methods=['GET','POST'])
@@ -87,13 +88,20 @@ def s2():
         }
         response = requests.request("POST", url, headers=headers, data=payload)
         res=response.json()
-        r_list=[]
         if res['value']==[]:
             ex="Caution: The results are blank because the part details you've entered might not exist. Please try again!"
         else:
             ex="We found the following details:"
             r=res['value']
-	    unique={elem["Functiongroup"]: elem for elem in r}.values() 
+            # for i in r:
+            #     if name in i['Name']:
+            #         name_f.append(i)
+            # name_f = sorted(name_f, key=itemgetter('SegmentCode'))
+            # l1=[]
+            # for key, value in itertools.groupby(name_f, key=itemgetter('SegmentCode')):
+            #     for i in value:
+            #         l1.append(i)
+            unique={elem["Functiongroup"]: elem for elem in r}.values() 
             unique=list(unique)
         return render_template("public/form_result1.html",data=unique,ex=ex)
 
