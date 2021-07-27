@@ -80,23 +80,51 @@ th, td {
 {% for i in data %}
 <table id="results">
 	<tr>
-		<th>Part Name:</th>
+		<th>Part Name</th>
 		<td>{{i.Name}}</td>
 	</tr>
 	<tr>
-		<th>Function Group:</th>
+		<th>Demarcation</th>
+		<td>{{i.Demarcation}}</td>
+	</tr>
+  <tr>
+		<th>Charactersistics</th>
+		<td>{{i.Charactersistics}}</td>
+	</tr>
+	<tr>
+		<th>Function Group</th>
 		<td>{{i.Functiongroup}}</td>
 	</tr>
-	<tr>
-		<th>Part Type:</th>
+  <tr>
+		<th>Part Type</th>
 		<td>{{i.PartType}}</td>
 	</tr>
+  <tr>
+		<th>Weight</th>
+		<td>{{i.Weight}}</td>
+	</tr>
+  <tr>
+		<th>Material</th>
+		<td>{{i.Material}}</td>
+	</tr>
+  <tr>
+		<th>Length</th>
+		<td>{{i.Length}}</td>
+	</tr>
+  <tr>
+		<th>Width</th>
+		<td>{{i.Width}}</td>
+	</tr>
+  <tr>
+		<th>Height</th>
+		<td>{{i.Height}}</td>
+	</tr>
 	<tr>
-		<th>Segment Code:</th>
+		<th>Segment Code</th>
 		<td>{{i.SegmentCode}}</td>
 	</tr>
 	<tr>
-		<th>Segment Description:</th>
+		<th>Segment Description</th>
 		<td>{{i.SegmentDescription}}</td>
 	</tr>
 </table><br><br>
