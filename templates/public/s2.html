@@ -48,17 +48,38 @@ input[type=text]:focus {
     padding: 1%;
     padding-right: 2%;
 }
+#loading{
+  border-radius: 20px;
+    margin-left: 5%;
+    margin-top: 1%;
+    height: 30%;
+    width: 85%;
+    background-color: rgba(214, 243, 247, 0.377);
+    padding: 1%;
+    padding-right: 2%;
+}
 input{
     border-radius: 10px;
     height: auto;
     width: auto;
 }
 </style>
-<div id='search2'>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.js"></script>  
+
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.js"></script>  
+
+<link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/themes/ui-lightness/jquery-ui.css" rel="stylesheet" type="text/css"/>  
+
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+
+<body>
+  <div id="loading" style="display:none; "><img src="{{ url_for('static',filename='images/loading.gif') }}" alt=""></div>
+  <div id='search2'>
     <h1 style="font-size: 20px;">AI Semantic Search</h1>
     <form role="form" action="" method="POST">
-        <input type="text" name="pname" placeholder="Part Name">
-        <input type="text" name="pdem" placeholder="Demarcation">
+        <input type="text" name="pname" id="pname" placeholder="Part Name">
+        <input type="text" name="pdem" id="pdem" placeholder="Demarcation">
         <input type="text" name="pchar" placeholder="Characteristics"><br>
         <input type="text" name="pfuncd" style="height:100px;display: inline-block;" placeholder="Function Group Description">
         <input type="text" name="pfunc" placeholder="Function Group"><br>
@@ -69,8 +90,14 @@ input{
         <input type="text" name="wdt" style="display: inline-block;width: 15%;" placeholder="Width">
         <input type="text" name="hgt" style="display: inline-block;width: 15%;" placeholder="Height"><br>
         <input type="text" name="mat" placeholder="Material"><br>
-        <input style="font-size: 20px;" type="submit">
+        <input style="font-size: 20px;" type="submit" onclick="loading()">
     </form>
     </div> 
+    <script type="text/javascript">// <![CDATA[
+      function loading(){
+          $("#loading").show();
+          $("#search2").hide();       
+      }
+// ]]></script>
 </body>
 </html>
