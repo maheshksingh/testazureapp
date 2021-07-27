@@ -79,27 +79,91 @@ th, td {
 {{ex}}<br><br>
 <table id="results">
 	<tr>
+		<th>Part Number:</th>
+		<td>{{r[0]}}</td>
+	</tr>
+  <tr>
 		<th>Name:</th>
 		<td>{{r[1]}}</td>
 	</tr>
-	<tr>
-		<th>Segment Code:</th>
-		<td>{{r[5]}}</td>
-	</tr>	<tr>
-		<th>Segment Description:</th>
-		<td>{{r[6]}}
-		</td>
-	</tr>	<tr>
+  <tr>
 		<th>Demarcation:</th>
 		<td>{{r[2]}}</td>
-	</tr>	<tr>
-		<th>Function Group:</th>
+	</tr>
+  <tr>
+		<th>Characteristics:</th>
 		<td>{{r[3]}}</td>
+	</tr>	
+  <tr>
+		<th>Function Group:</th>
+		<td>{{r[4]}}</td>
 	</tr>
   <tr>
 		<th>Part Type :</th>
-		<td>{{r[4]}}</td>
+		<td>{{r[5]}}</td>
 	</tr>
+	<tr>
+		<th>Weight:</th>
+		<td>{{r[6]}}</td>
+	</tr>
+  <tr>
+		<th>Material:</th>
+		<td>{{r[7]}}</td>
+	</tr>	<tr>
+		<th>Length:</th>
+		<td>{{r[8]}}</td>
+	</tr>
+  <tr>
+		<th>Width :</th>
+		<td>{{r[9]}}</td>
+	</tr>
+  <tr>
+		<th>Height:</th>
+		<td>{{r[10]}}</td>
+	</tr>
+  <tr>
+		<th>Reference Part Number:</th>
+		<td>{{r[11]}}</td>
+	</tr>	<tr>
+		<th>Preceeding Part Number:</th>
+		<td>{{r[12]}}</td>
+	</tr>
+  <tr>
+		<th>Succeeding Part Number :</th>
+		<td>{{r[13]}}</td>
+	</tr>
+	<tr>
+		<th>Segment Code:</th>
+		<td>{{r[14]}}</td>
+	</tr>	
+  <tr>
+		<th>Segment Description:</th>
+		<td>{{r[15]}}
+		</td>
+	</tr>
+</table>
+<br>
+<h2>Related Part Details</h2>
+{% for key, value in nos.items() %}
+<h3>{{key}} Details</h3><br>
+<table id="results">
+	<tr>
+		<th>Part Number:</th>
+		<td>{{value[0]}}</td>
+	</tr>
+  <tr>
+		<th>Part Name:</th>
+		<td>{{value[1]}}</td>
+	</tr>
+	<tr>
+		<th>Segment Code:</th>
+		<td>{{value[2]}}</td>
+	</tr>
+	<tr>
+		<th>Segment Description:</th>
+		<td>{{value[3]}}</td>
+	</tr>
+{% endfor %}
 </table>
 <br>
 <button onclick="location.href='/form1'" type="button">Search again</button><br>
