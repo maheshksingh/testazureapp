@@ -50,17 +50,34 @@ input[type=text]:focus {
     padding: 1%;
     padding-right: 2%;
 }
+#loading{
+  border-radius: 20px;
+  background-color: rgba(214, 243, 247, 0.377);
+  padding: 1%;
+  padding-right: 2%;
+}
+#loading img{
+  margin-left: 1%;
+}
 input{
     border-radius: 10px;
     height: 30px;
 }
 </style>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+<div id="loading" style="display:none;"><img src="{{ url_for('static',filename='images/loading.gif') }}" alt="" ></div>
 <div id='search1'>
     <h1 style="font-size: 20px;">Historical Part Search</h1>
     <form role="form" action="" method="POST">
         <input type="number" name="pno" style="width: 100%;" placeholder="Reference Part/ Preceding Part/ Succeeding Part"><br>
-        <input style="font-size: 20px;" type="submit">
+        <input style="font-size: 20px;" type="submit" onclick="loading()">
     </form>
     </div>
+    <script type="text/javascript">
+      function loading(){
+          $("#loading").show();
+          $("#search1").hide();       
+      }
+</script>
 </body>
 </html>
