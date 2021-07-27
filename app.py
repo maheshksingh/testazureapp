@@ -1,5 +1,9 @@
 #@Author: Rohin Singh
 
+# #This is segment search mark3 and the improvements are as follows 
+# -Improved accuracy of search 2
+# -Suggestion engine added to search 2
+
 from flask import Flask
 from flask import render_template, abort, url_for, json, jsonify, Flask, Response, send_from_directory, send_file, Flask, make_response, request
 import pandas as pd
@@ -8,13 +12,22 @@ import os
 import requests
 import itertools
 from operator import itemgetter
+import pyodbc
+from rank_bm25 import BM25Okapi
 
 app = Flask(__name__)
 
-#initialising s1
-# filename = os.path.join(app.root_path,'data/data.json')
-# with open(filename) as outfile:
-data = "https://segmentcode.blob.core.windows.net/segmentcodecontainer/data.json?sp=r&st=2021-06-07T13:01:31Z&se=2021-06-07T21:01:31Z&spr=https&sv=2020-02-10&sr=b&sig=e2MX6C%2F3%2Fu2vy99YYZdnynteNWKsu68QHn%2BvU8kBTfA%3D"
+# retrieve datasettry:
+for i in range(0,3):
+    while True:
+        try:
+            cnxn = pyodbc.connect('DRIVER={SQL Server};'
+            'SERVER=tcp:segmentcodedbserver.database.windows.net,1433;'
+            'DATABASE=segmentcodedb;UID=segmentcode;PWD=Mahesh143;')
+        except:
+            print("Couldn't connect to db, trying again")
+            continue
+        break
 
 #reading input
 @app.route('/',methods=['GET','POST'])
@@ -27,19 +40,34 @@ def s1():
         return render_template("public/s1.html")
     elif request.method=='POST':
         pno=request.form.get("pno")
-        import pyodbc 
-        cnxn = pyodbc.connect('DRIVER={ODBC Driver 17 for SQL Server};'
-                      'SERVER=tcp:segmentcodedbserver.database.windows.net,1433;'
-                      'DATABASE=segmentcodedb;UID=segmentcode;PWD=Mahesh143;')
-
         cursor = cnxn.cursor()
-        cursor.execute("SELECT Partno,Name,Demarcation,Functiongroup,PartType,SegmentCode,SegmentDescription FROM segmentjune03 WHERE Partno="+pno) 
+        cursor.execute("SELECT Partno,Name, Demarcation,Characteristics, Functiongroup,PartType,Weight,Material,Length,Width,Height,ReferencePart,PrecedingPart,SuccedingPart,SegmentCode,SegmentDescription FROM segmentjune03 WHERE Partno="+pno) 
         res = cursor.fetchone()
+        nos={}
+
+        #reference part
+        if res[11]!=None:
+            ref_no=res[11]
+            cursor.execute("SELECT Partno,Name, SegmentCode,SegmentDescription FROM segmentjune03 WHERE Partno="+ref_no)
+            ref=cursor.fetchone()
+            nos['Reference Part']=ref
+        #preceding part
+        if res[12]!=None:
+            pre_no=res[12]
+            cursor.execute("SELECT Partno,Name, SegmentCode,SegmentDescription FROM segmentjune03 WHERE Partno="+pre_no)
+            pre=cursor.fetchone()
+            nos['Preceeding Part']=pre
+        #succeeding part
+        if res[13]!=None:
+            suc_no=res[13]
+            cursor.execute("SELECT Partno,Name, SegmentCode,SegmentDescription FROM segmentjune03 WHERE Partno="+suc_no)
+            suc=cursor.fetchone()
+            nos['Suceeding Part']=suc
         if res==None:
             ex="Caution: The results are blank because the number you've entered might not exist. Please try again!"
         else:
             ex="We found the following details:"
-        return render_template("public/form_result.html",r=res,ex=ex)
+        return render_template("public/form_result.html",r=res,ex=ex,nos=nos)
 
 @app.route('/form2',methods=['GET','POST'])
 def s2(): 
@@ -72,43 +100,51 @@ def s2():
         s_list.append(lgt)
         s_list.append(hgt)
         s_list.append(wdt)
-        sch=""
+        query=""
         for i in s_list:
             if i!="":
-                sch+=i+" "
-        #postman code to hit azure api
-        url = "https://cognitivesearchtest.search.windows.net/indexes/segetcode-column-wise-azuresql-index/docs/search?api-version=2020-06-30-Preview&query_type=semantic&searchFields=Partno,Name,Demarcation,Characteristics,Functiongroup,PartType,Weight,Material,Length,Width,Height&queryLanguage=en-us"
+                query+=i+" "
+        SQL_Query = pd.read_sql_query("select Name, Demarcation,Characteristics, Functiongroup,PartType,Weight,Material,Length,Width,Height,SegmentCode,SegmentDescription from segmentjune03 WHERE Name LIKE '%"+name+"%'", cnxn)
+        df = pd.DataFrame(SQL_Query, columns=['Name','Demarcation','Charactersistics','Functiongroup','PartType','Weight','Material','Length','Width','Height','SegmentCode','SegmentDescription'])
+        df.reset_index(level=0, inplace=True)
+        df2 = df[df.columns[0:]].apply(lambda x: ' '.join(x.dropna().astype(str)),axis=1)
+        list1 = df2.tolist()
 
-        payload = json.dumps({
-            "search": sch
-        })
-        headers = {
-        'api-key': 'A328C26CC0F9AF89AC6ABF68E0A809E2',
-        'Content-Type': 'application/json'
-        }
-        response = requests.request("POST", url, headers=headers, data=payload)
-        res=response.json()
-        if res['value']==[]:
-            ex="Caution: The results are blank because the part details you've entered might not exist. Please try again!"
+        #parse list into corpus
+        corpus = list1
+        tokenized_corpus = [doc.split(" ") for doc in corpus]
+        bm25 = BM25Okapi(tokenized_corpus)
+
+        #result
+        tokenized_query = query.split(" ")
+        doc_scores = bm25.get_scores(tokenized_query)
+        res=bm25.get_top_n(tokenized_query, corpus, n=3)
+        #Extracting index numbers of results to fetch from db
+        index=[]
+        result_df=pd.DataFrame()
+        for i in res:
+            first=i.split(" ")[0]
+            index.append(first)
+        #extracting result rows from dataframe
+        for i in index:
+            i=int(i)
+            result_df = result_df.append(df[df['index'] == i])
+        result = result_df.to_dict(
+                orient='records', 
+                )        
+        if result==None:
+            ex="Caution: The results are blank because the number you've entered might not exist. Please try again!"
         else:
             ex="We found the following details:"
-            r=res['value']
-            # for i in r:
-            #     if name in i['Name']:
-            #         name_f.append(i)
-            # name_f = sorted(name_f, key=itemgetter('SegmentCode'))
-            # l1=[]
-            # for key, value in itertools.groupby(name_f, key=itemgetter('SegmentCode')):
-            #     for i in value:
-            #         l1.append(i)
-            unique={elem["Functiongroup"]: elem for elem in r}.values() 
-            unique=list(unique)
-        return render_template("public/form_result1.html",data=unique,ex=ex)
+        return render_template("public/form_result1.html",data=result,ex=ex)
 
 @app.route('/dummy',methods=['GET','POST'])
 def blank():
     return render_template("public/dummy.html")
 
+@app.route('/loading',methods=['GET','POST'])
+def load():
+    return render_template("public/loading.html")
 
 if __name__ == "__main__":
     app.run(debug=True,
