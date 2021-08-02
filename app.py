@@ -18,7 +18,16 @@ from rank_bm25 import BM25Okapi
 app = Flask(__name__)
 
 # retrieve datasettry:
-cnxn = pyodbc.connect('DRIVER={ODBC Driver 17 for SQL Server};SERVER=tcp:segmentcodedbserver.database.windows.net,1433;DATABASE=segmentcodedb;UID=segmentcode;PWD=Mahesh143;')
+for i in range(0,3):
+    while True:
+        try:
+            cnxn = pyodbc.connect('DRIVER={SQL Server};'
+            'SERVER=tcp:segmentcodedbserver.database.windows.net,1433;'
+            'DATABASE=segmentcodedb;UID=segmentcode;PWD=Mahesh143;')
+        except:
+            print("Couldn't connect to db, trying again")
+            continue
+        break
 
 #reading input
 @app.route('/',methods=['GET','POST'])
@@ -35,30 +44,29 @@ def s1():
         cursor.execute("SELECT Partno,Name, Demarcation,Characteristics, Functiongroup,PartType,Weight,Material,Length,Width,Height,ReferencePart,PrecedingPart,SuccedingPart,SegmentCode,SegmentDescription FROM segmentjune03 WHERE Partno="+pno) 
         res = cursor.fetchone()
         nos={}
-
-        #reference part
-        if res[11]!=None:
-            ref_no=res[11]
-            cursor.execute("SELECT Partno,Name, SegmentCode,SegmentDescription FROM segmentjune03 WHERE Partno="+ref_no)
-            ref=cursor.fetchone()
-            nos['Reference Part']=ref
-        #preceding part
-        if res[12]!=None:
-            pre_no=res[12]
-            cursor.execute("SELECT Partno,Name, SegmentCode,SegmentDescription FROM segmentjune03 WHERE Partno="+pre_no)
-            pre=cursor.fetchone()
-            nos['Preceeding Part']=pre
-        #succeeding part
-        if res[13]!=None:
-            suc_no=res[13]
-            cursor.execute("SELECT Partno,Name, SegmentCode,SegmentDescription FROM segmentjune03 WHERE Partno="+suc_no)
-            suc=cursor.fetchone()
-            nos['Suceeding Part']=suc
         if res==None:
             ex="Caution: The results are blank because the number you've entered might not exist. Please try again!"
         else:
             ex="We found the following details:"
-        return render_template("public/form_result.html",r=res,ex=ex,nos=nos)
+            #reference part
+            if res[11]!=None:
+                ref_no=res[11]
+                cursor.execute("SELECT Partno,Name, SegmentCode,SegmentDescription FROM segmentjune03 WHERE Partno="+ref_no)
+                ref=cursor.fetchone()
+                nos['Reference Part']=ref
+            #preceding part
+            if res[12]!=None:
+                pre_no=res[12]
+                cursor.execute("SELECT Partno,Name, SegmentCode,SegmentDescription FROM segmentjune03 WHERE Partno="+pre_no)
+                pre=cursor.fetchone()
+                nos['Preceeding Part']=pre
+            #succeeding part
+            if res[13]!=None:
+                suc_no=res[13]
+                cursor.execute("SELECT Partno,Name, SegmentCode,SegmentDescription FROM segmentjune03 WHERE Partno="+suc_no)
+                suc=cursor.fetchone()
+                nos['Suceeding Part']=suc
+    return render_template("public/form_result.html",r=res,ex=ex,nos=nos)
 
 @app.route('/form2',methods=['GET','POST'])
 def s2(): 
