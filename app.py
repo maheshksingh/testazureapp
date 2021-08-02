@@ -18,7 +18,7 @@ from rank_bm25 import BM25Okapi
 app = Flask(__name__)
 
 # retrieve datasettry:
-cnxn = pyodbc.connect('DRIVER={SQL Server};'
+cnxn = pyodbc.connect('ODBC Driver 17 for SQL Server};'
 'SERVER=tcp:segmentcodedbserver.database.windows.net,1433;'
 'DATABASE=segmentcodedb;UID=segmentcode;PWD=Mahesh143;')
 
