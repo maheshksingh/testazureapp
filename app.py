@@ -110,20 +110,22 @@ def s2():
         df.reset_index(level=0, inplace=True)
         df2 = df[df.columns[0:]].apply(lambda x: ' '.join(x.dropna().astype(str)),axis=1)
         list1 = df2.tolist()
-
-        #parse list into corpus
-        corpus = list1
-        tokenized_corpus = [doc.split(" ") for doc in corpus]
-        bm25 = BM25Okapi(tokenized_corpus)
-
-        #result
-        tokenized_query = query.split(" ")
-        doc_scores = bm25.get_scores(tokenized_query)
-        res=bm25.get_top_n(tokenized_query, corpus, n=3)
-        if res==None:
+        if list1==[]:
             ex="Caution: The results are blank because the number you've entered might not exist. Please try again!"
+            result_df=pd.DataFrame()
+            result = result_df.to_dict(orient='records',)  
         else:
             ex="We found the following details:"
+            #parse list into corpus
+            corpus = list1
+            tokenized_corpus = [doc.split(" ") for doc in corpus]
+            bm25 = BM25Okapi(tokenized_corpus)
+
+            #result
+            tokenized_query = query.split(" ")
+            doc_scores = bm25.get_scores(tokenized_query)
+            res=bm25.get_top_n(tokenized_query, corpus, n=3)
+            
             index=[]
             result_df=pd.DataFrame()
             for i in res:
@@ -131,10 +133,10 @@ def s2():
                 index.append(first)
             #extracting result rows from dataframe
             for i in index:
-                a=int(i)
-                result_df = result_df.append(df[df['index'] == a])
+                i=int(i)
+                result_df = result_df.append(df[df['index'] == i])
             result = result_df.to_dict(
-                    orient='records',)      
+                    orient='records',)       
         return render_template("public/form_result1.html",data=result,ex=ex)
 
 @app.route('/dummy',methods=['GET','POST'])
