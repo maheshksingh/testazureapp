@@ -120,23 +120,21 @@ def s2():
         tokenized_query = query.split(" ")
         doc_scores = bm25.get_scores(tokenized_query)
         res=bm25.get_top_n(tokenized_query, corpus, n=3)
-        #Extracting index numbers of results to fetch from db
-        index=[]
-        result_df=pd.DataFrame()
-        for i in res:
-            first=i.split(" ")[0]
-            index.append(first)
-        #extracting result rows from dataframe
-        for i in index:
-            i=int(i)
-            result_df = result_df.append(df[df['index'] == i])
-        result = result_df.to_dict(
-                orient='records', 
-                )        
-        if result==None:
+        if res==None:
             ex="Caution: The results are blank because the number you've entered might not exist. Please try again!"
         else:
             ex="We found the following details:"
+            index=[]
+            result_df=pd.DataFrame()
+            for i in res:
+                first=i.split(" ")[0]
+                index.append(first)
+            #extracting result rows from dataframe
+            for i in index:
+                a=int(i)
+                result_df = result_df.append(df[df['index'] == a])
+            result = result_df.to_dict(
+                    orient='records',)      
         return render_template("public/form_result1.html",data=result,ex=ex)
 
 @app.route('/dummy',methods=['GET','POST'])
