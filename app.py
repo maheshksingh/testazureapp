@@ -17,8 +17,19 @@ from rank_bm25 import BM25Okapi
 
 app = Flask(__name__)
 
-# retrieve dataset:
+# retrieve datasettry:
 cnxn = pyodbc.connect('DRIVER={ODBC Driver 17 for SQL Server};SERVER=tcp:segmentcodedbserver.database.windows.net,1433;DATABASE=segmentcodedb;UID=segmentcode;PWD=Mahesh143;')
+
+# for i in range(0,3):
+#     while True:
+#         try:
+#             cnxn = pyodbc.connect('DRIVER={SQL Server};'
+#             'SERVER=tcp:segmentcodedbserver.database.windows.net,1433;'
+#             'DATABASE=segmentcodedb;UID=segmentcode;PWD=Mahesh143;')
+#         except:
+#             print("Couldn't connect to db, trying again")
+#             continue
+#         break
 
 #reading input
 @app.route('/',methods=['GET','POST'])
