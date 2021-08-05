@@ -21,7 +21,7 @@ app = Flask(__name__)
 for i in range(0,3):
     while True:
         try:
-            cnxn = pyodbc.connect('DRIVER={SQL Server};'
+            cnxn = pyodbc.connect('DRIVER={ODBC Driver 17 for SQL Server};'
             'SERVER=tcp:segmentcodedbserver.database.windows.net,1433;'
             'DATABASE=segmentcodedb;UID=segmentcode;PWD=Mahesh143;')
         except:
