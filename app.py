@@ -14,11 +14,9 @@ import itertools
 from operator import itemgetter
 import pyodbc
 from rank_bm25 import BM25Okapi
+import threading
 
 app = Flask(__name__)
-
-# retrieve datasettry:
-cnxn = pyodbc.connect('DRIVER={ODBC Driver 17 for SQL Server};SERVER=tcp:segmentcodedbserver.database.windows.net,1433;DATABASE=segmentcodedb;UID=segmentcode;PWD=Mahesh143;')
 
 # for i in range(0,3):
 #     while True:
@@ -42,6 +40,10 @@ def s1():
         return render_template("public/s1.html")
     elif request.method=='POST':
         pno=request.form.get("pno")
+        # retrieve dataset:
+        cnxn = pyodbc.connect('DRIVER={ODBC Driver 17 for SQL Server};'
+            'SERVER=tcp:segmentcodedbserver.database.windows.net,1433;'
+            'DATABASE=segmentcodedb;UID=segmentcode;PWD=Mahesh143;')
         cursor = cnxn.cursor()
         cursor.execute("SELECT Partno,Name, Demarcation,Characteristics, Functiongroup,PartType,Weight,Material,Length,Width,Height,ReferencePart,PrecedingPart,SuccedingPart,SegmentCode,SegmentDescription FROM segmentjune03 WHERE Partno="+pno) 
         res = cursor.fetchone()
@@ -113,6 +115,10 @@ def s2():
         for i in s_list:
             if i!="":
                 query+=i+" "
+        # retrieve dataset:
+        cnxn = pyodbc.connect('DRIVER={ODBC Driver 17 for SQL Server};'
+            'SERVER=tcp:segmentcodedbserver.database.windows.net,1433;'
+            'DATABASE=segmentcodedb;UID=segmentcode;PWD=Mahesh143;')
         SQL_Query = pd.read_sql_query("select Name, Demarcation,Characteristics, Functiongroup,PartType,Weight,Material,Length,Width,Height,SegmentCode,SegmentDescription from segmentjune03 WHERE Name LIKE '%"+name+"%'", cnxn)
         df = pd.DataFrame(SQL_Query, columns=['Name','Demarcation','Charactersistics','Functiongroup','PartType','Weight','Material','Length','Width','Height','SegmentCode','SegmentDescription'])
         df.reset_index(level=0, inplace=True)
